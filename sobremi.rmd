@@ -1,12 +1,6 @@
 ---
-title: "Untitled"
+title: "Sobre mi"
 description: |
-  A new article created using the Distill format.
-author:
-  - name: Nora Jones 
-    url: https://example.com/norajones
-    affiliation: Spacely Sprockets
-    affiliation_url: https://example.com/spacelysprokets
 date: "`r Sys.Date()`"
 output: distill::distill_article
 ---
@@ -15,11 +9,24 @@ output: distill::distill_article
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Distill is a publication format for scientific and technical writing, native to the web. 
+Hola! 
 
-Learn more about using Distill for R Markdown at <https://rstudio.github.io/distill>.
+Mi nombre es Malena De Baere y soy Licenciada en Trabajo Social de la Universidad de Buenos Aires. Actualmente me encuentro finalizando la Maestría en Economía Urbana de la Universidad Torcuato Di Tella. Durante mi carrera profesional he transitado por distintos espacios relacionados al Hábitat, lo cual me ha motivado a seguir formandome en estos aspectos. 
+
+Este sitio fue realizado en el marco de la materia de "Instrumentos de Análisis Territorial Aplicados a Estudios Urbanos", a cargo de los profesores Juan Pablo Ruiz Nicolini (alias "el Tuqu") y Pablo Tiscornia. Aquí aprendemos ha utilizar(o al menos intentamos) lenguaje de programación con "R Studio". Esta herramienta permité poder trabajar con grandes bases de datos para realizar análisis de forma más sencilla, rápida y ( si no hay errores) confiable. 
+
+Te dejo los links a los repositorios de otros trabajos que hemos realizado en la materia:
+
+- **Trabajo Práctico I**  : vinculado al análisis de la utilización de las lineas de subte durante el año 2020
+https://github.com/Malenaadb/TP1_IAU2
+
+- **Trabajo Práctico II**  : vinculado a la identificación del registro de poblaciones originarias a lo largo de nuestro país
+https://github.com/Malenaadb/IAU2_TP2
+
+Espero te haya interesado lo realizado. 
 
 
+¡Y muchas gracias por haber llegado hasta acá! 
 
 
 

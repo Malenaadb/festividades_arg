@@ -8,7 +8,7 @@ site: distill::distill_website
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## **Turismo de Festivales y el cachengue : Como podrían aportar al desarrollo de las ciudades en Argentina**
+## **Turismo de Festivales y cachengue : Como podrían aportar al desarrollo de las ciudades en Argentina**
 
 
 ### Presentación del tema

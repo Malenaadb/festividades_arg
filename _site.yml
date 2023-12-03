@@ -1,7 +1,7 @@
 name: "festividades_arg"
 title: "Eventos Culturales en Argentina"
 description: |
-  Trabajo práctico para la materia "Instrumentos de Análisis Urbano II"
+  Trabajo práctico para la materia "Instrumentos de Análisis Territorial Aplicados a Estudios Urbanos"
   Malena De Baere
 output_dir: "docs"
 navbar:

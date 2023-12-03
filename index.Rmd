@@ -3,6 +3,11 @@ title: "Eventos Culturales en Argentina"
 description: |
   Aquí encontrarán un breve recorrido por distintos eventos realizados en el pais. 
   Pasen y vean 
+author:
+  - name: Malena De Baere 
+    url: www.linkedin.com/in/malena-de-baere
+    affiliation: Licenciada en Trabajo Social - Maestranda en Economía Urbana 
+date: "`r Sys.Date()`"
 site: distill::distill_website
 ---
 
