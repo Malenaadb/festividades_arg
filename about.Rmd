@@ -8,3 +8,301 @@ site: distill::distill_website
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+## **Turismo de Festivales y el cachengue : Como podrían aportar al desarrollo de las ciudades en Argentina**
+
+
+### Presentación del tema
+
+Las fiestas, festivales y carnavales desempeñan un rol central en el desarrollo económico y la promoción turística de las ciudades. Más allá de ser celebraciones culturales vibrantes, estos eventos actúan como impulsores claves del desarrollo local. Atraen a visitantes de diversas regiones, generando un significativo aumento en la actividad turística y, como consecuencia, contribuyen al flujo de ingresos en la comunidad. Esta dinámica no solo beneficia a grandes empresas, sino que también se traduce en un respaldo vital para pequeños comercios y alojamientos locales.
+
+Cada región busca dejar una huella distintiva a través de la creación de productos culturales que reflejen su historia e identidad. Estos productos, vitales para la identidad local, encuentran su expresión en lugares emblemáticos como espacios públicos, anfiteatros al aire libre, museos, salas de conciertos, teatros y espacios de exposición, que desempeñan un papel crucial al difundir el rico legado cultural del territorio.
+
+En la actualidad, se observa una creciente tendencia hacia la diferenciación y la responsabilidad en el manejo de los recursos. El turismo se enfrenta a nuevos desafíos, reconociendo la importancia de preservar el patrimonio por lo cual estas iniciativas se tornan relevantes para las agendas locales de quienes lo realizan. En este contexto, el turismo sostenible, que engloba el ecoturismo y el turismo cultural, emerge como el eje central de la estrategia turística en regiones con un marcado atractivo turístico. Este enfoque busca no solo satisfacer las necesidades presentes, sino también preservar y potenciar el legado cultural y natural para las generaciones futuras.
+
+![Carnavales de Salta](https://media.viajando.travel/p/3f3d44f05e86134b20116ca3dc23fc73/adjuntos/236/imagenes/000/570/0000570011/1200x0/smart/carnaval-salta.png)
+
+En el marco de lo mencionado más arriba es que el siguiente trabajo busca indagar sobre qué cantidad de eventos se realizan a lo largo del país, cuáles son las provincias que más desarrollan este tipo de iniciativas y cuál es la época del año más elegida para hacerlo. Se buscará a través de esto, poder tener mayor conocimiento sobre el alcance que tienen este tipo de eventos en Argentina y realizar algunas reflexiones sobre su impacto en el desarrollo de las localidades.
+
+
+### Ubicación
+
+El análisis se centrará en la ubicación de eventos locales realizados a lo largo de todo el país. Dichos eventos son catalogados como fiestas, festivales, carnavales y aniversarios. A los fines de este trabajo, nos centraremos en aquellos que son plausibles de ser realizados en más de una edición. 
+
+
+### Fuentes de datos
+
+La información utilizada ha sido recopilada desde el portal de datos abiertos del Gobierno de la República Argentina. Los mismos incluyen información relativa a eventos realizados en distintas localidades del país, suministrando su categoría, ubicación geográfica, nombre, mes de realización, entre otros. 
+
+
++ [Ministerio de Cultura de la República Argentina](https://datos.gob.ar/dataset/cultura-mapa-cultural-agentes-actividades-culturales/archivo/cultura_d948730c-e029-49c2-b63d-86fac65ac30a)
+
+
+## Buceando la información disponible
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(sf)
+library(geoAr)
+library(ggplot2)
+library(leaflet)
+library(tidygeocoder)
+library(lubridate)
+library(rmarkdown)
+
+```
+
+Como se mencionó en el apartado anterior, la información que se analizará se refiere a eventos públicos que se realizan en Argentina. Para esto, se ha tenido que importar una base de datos del Ministerio de Cultura de la Nación que se encuentra en el portal de datos abiertos del Gobierno Nacional. 
+
+Debido a que la base de datos incluía información sobre puntos geográficos y algunos datos estaban incorrectamente registrados, se llevaron a cabo acciones para corregir y mejorar esta situación. A su vez, se han activado las bibliotecas que facilitarán la limpieza, tratamiento y transformación de los datos, asegurando que, al realizar ejercicios de visualización y análisis, la información sea clara y precisa.
+
+
+```{r}
+fiestas <- read.csv("https://datos.cultura.gob.ar/dataset/0560ef96-55ca-4026-b70a-d638e1541c05/resource/d948730c-e029-49c2-b63d-86fac65ac30a/download/10_fiestaspopulares_festivales-datos_abiertos-2.csv", quote = '"', stringsAsFactors = TRUE, encoding = "UTF-8")
+```
+
+```{r}
+fiestas$Latitud <- as.numeric(sub(",", ".", fiestas$Latitud))
+fiestas$Longitud <- as.numeric(sub(",", ".", fiestas$Longitud))
+```
+
+```{r}
+nas <- which(is.na(fiestas$Latitud) | is.na(fiestas$Longitud))
+```
+
+```{r}
+fiestas <- fiestas[-nas, ]
+
+```
+
+
+Se analiza en una primera instancia qué información hay dentro del dataset:
+
+
+```{r}
+summary(fiestas)
+dim(fiestas)
+class(fiestas)
+```
+
+
+Este primer dataset posee 3255 registros y 27 columnas con información relativa a distintos eventos a nivel nacional relevados por el Ministerio. Dentro de ella, se encuentran datos vinculados a sus categorías, provincia y localidad donde se realiza, temática principal, nombre, entre otros. Se evidencia también que la base posee faltantes de información relativa a alguna columna en particular de algunos eventos registrados en el dataset. 
+En un primer paneo, se puede evidenciar una mayor cantidad de eventos del tipo "fiestas y/o festivales" con 2509, seguido por un total de 462 "aniversarios" y, por último, 282 "Carnavales". En base a este resultado, se realiza un primer gráfico que permita visualizar esta información:
+
+
+### ¿Qué tipos de eventos se realizan y en qué lugares del país?
+
+```{r}
+ggplot(fiestas) +
+  geom_bar(aes(x = Categoria, fill = Temática_principal)) +
+  labs(title = expression(bold("TIPO DE FESTIVIDAD")),
+       subtitle = "Información relativa a festividades y temáticas principales",
+       fill = "Temática",
+       x = "Tipo",
+       y = "Cantidad",
+       caption = "Fuente: Ministerio de Cultura de la Nación - 2023") +
+ theme_minimal() +
+  theme(plot.background = element_rect(fill = "white"),
+        legend.position = "bottom") +
+  scale_fill_brewer(palette = "Set3")
+```
+
+
+En el gráfico anterior podemos visualizar que dentro de los eventos denominados como "Fiestas y/o festivales" hay diversos tipos: folclóricos, gastronómicos, religiosos, entre otros. Lo cual nos habla de la diversidad que existe a lo largo del país y de la variada oferta que se puede encontrar. 
+
+Para evitar posibles malentendidos sobre si los aniversarios son eventos recurrentes anuales, enfocaremos nuestro análisis en los eventos de carnavales y fiestas y/o festivales. De esta manera, podremos identificar las provincias que celebran más festividades y determinar los meses en los que estas se desarrollan con mayor frecuencia.
+
+
+
+
+
+```{r}
+filtro <- fiestas %>% 
+  select(Categoria, Provincia, Localidad.Paraje, Nombre, Latitud, Longitud, Temática_principal, Mes.de.realización,Cantidad.aprox.de.asistentes) %>%
+  filter(Categoria %in% c("Fiesta y/o festival", "Carnaval"))
+
+```
+
+```{r}
+library(viridis)
+```
+
+
+```{r, fig.height=6, fig.width=8}
+porcentaje_por_provincia <- filtro %>%
+  group_by(Provincia) %>%
+  summarize(Porcentaje = n() / nrow(filtro) * 100)
+
+
+ggplot(porcentaje_por_provincia, aes(x = reorder(Provincia, -Porcentaje), y = Porcentaje)) +
+  geom_bar(stat = "identity", fill = "skyblue") + coord_flip() +
+  geom_text(
+    aes(label = sprintf("%.1f%%", Porcentaje)),
+    position = position_stack(vjust = 0.5),
+    hjust = 1.05,
+    color = "black",
+    size = 3
+  ) +
+  labs(
+    title = expression(bold("PORCENTAJE DE DISTRIBUCIÓN DE EVENTOS A NIVEL PAÍS")),
+    x = "Provincia",
+    y = "Porcentaje",
+    caption = "Fuente: Ministerio de Cultura de la Nación - 2023"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "white"),
+    legend.position = "bottom"
+  )
+```
+
+
+
+
+Se evidencia en el gráfico que las provincias que más fiestas o carnavales se han relevado son Córdoba (11,4%), seguida por Catamarca (10.7%), jujuy (8.4%) y Chaco (7.8%), lo cual podría llamar la atención siendo que mucho de los eventos masivos que posee el país puede creerse que se realizan en la CIudad de Buenos Aires. 
+
+Para hacerlo más gráfico, pasaremos la información a un mapa de la argentina que permita visualizarlo. Para esto, deberemos hacer varios procesos que permitan hacer compatible las bases con las que trabajamos. 
+
+
+
+
+```{r}
+filtro_geo <- st_as_sf(filtro, coords = c("Longitud", "Latitud"),crs = 4326)
+class(filtro_geo)
+```
+
+
+
+En primer momento, se descarga un mapa base de Argentina con las correspondientes provincias
+
+```{r}
+arg_map <- get_geo(geo = "ARGENTINA", level = "provincia")
+```
+
+
+
+Para poder coordinarlo con la base que hemos descargado previamente, le modificaremos el nombre a la variable y luego le agregamos el nombre de cada provincia a los códigos de las mismas.   
+
+```{r}
+arg_map <- arg_map %>%
+  rename(Provincia = codprov_censo)
+
+codigo_conversion <- c("02" = "Ciudad Autónoma de Buenos Aires", "06" = "Buenos Aires", "10" = "Catamarca",
+                        "14" = "Córdoba ", "18" = "Corrientes", "22" = "Chaco",
+                        "26" = "Chubut", "30" = "Entre Rios", "34" = "Formosa",
+                        "38" = "Jujuy", "42" = "La Pampa", "46" = "La Rioja",
+                        "50" = "Mendoza", "54" = "Misiones", "58" = "Neuquén",
+                        "62" = "Río Negro", "66" = "Salta", "70" = "San Juan",
+                        "74" = "San Luis", "78" = "Santa Cruz", "82" = "Santa Fe",
+                        "86" = "Santiago del Estero", "90" = "Tucumán",
+                        "94" = "Tierra del Fuego")
+
+arg_map <- arg_map %>%
+  mutate(Provincia = codigo_conversion[Provincia])
+```
+
+
+```{r}
+agrupado <- filtro %>%
+           group_by(Provincia) %>%
+  summarise(cantidad=n())
+```
+
+
+
+```{r}
+datos_combinados <- merge(arg_map, agrupado, by.x = "Provincia", by.y = "Provincia")
+```
+
+
+```{r}
+ggplot()+
+  geom_sf(data=datos_combinados, aes(fill=cantidad), color=NA) +
+      labs(title = expression(bold ("Cantidad de eventos por provincia")),
+         subtitle = "Argentina - 2023",
+         fill = "Cantidad",
+         caption= "Fuente: Ministerio de Cultura de la Nación") +
+   scale_fill_gradient(low = "lightblue", high = "darkblue", name = "Rango de eventos")+
+  theme_light()
+```
+
+
+El siguiente mapa puede evidenciar como los eventos se distribuyen mayormente en el centro del país y en la zona noroeste, en detrimento de la zona sur de Argentina.  
+
+### ¿En qué mes hay mayor oferta de eventos culturales?
+
+Finalmente, procederemos a analizar los meses del año en los cuales suelen llevarse a cabo estos eventos. Se llevaron a cabo diversas operaciones para abordar el ejercicio según la forma en que se registra la información. Sin embargo, se evidenció la presencia de varios elementos identificados como S/D (Sin Datos). Ante esta situación, se ha optado por filtrar estos datos y trabajar exclusivamente con aquellos que contienen información, con el propósito de obtener al menos una visión general de lo disponible. Este paso ha reducido el conjunto inicial de 2791 eventos a un total de 2020 eventos para su análisis subsiguiente.
+
+
+
+
+```{r}
+filtromes <- filtro %>%
+  filter(!tolower(Mes.de.realización) %in% c("s/d", "sin datos")) %>%
+  mutate(mes_num = month(ymd(paste("2022-", tolower(Mes.de.realización), "-01")), label = TRUE))
+```
+
+
+```{r}
+filtromes <- filtromes %>%
+  mutate(fecha_completa = make_date(2022, mes_num, 1))
+```
+
+
+```{r}
+filtromes <- filtromes %>%
+  mutate(fecha_completa=ymd(fecha_completa))
+```
+
+
+```{r}
+filtromes <- filtromes %>%
+  mutate(mes=month(fecha_completa, label = TRUE, abbr=FALSE, locale="es_ES.UTF-8"))
+```
+
+
+
+```{r}
+ggplot(filtromes, aes(x = mes, fill = Categoria)) +
+  geom_bar(stat = "count", position = "stack", color = "white") +
+  geom_text(
+    aes(label = after_stat(count)),
+    stat = "count",
+    position = position_stack(vjust = 0.5),
+    color = "black",
+    size = 3,
+    show.legend = FALSE
+  ) +
+  scale_fill_manual(values = c("green", "blue")) +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    title = expression(bold("Registro de eventos por mes de realización")),
+    subtitle = "Argentina",
+    fill = "Categoría",
+    x = "Mes",
+    y = "Cantidad",
+    caption = "Fuente: Ministerio de Cultura de la Nación 2023"
+  )
+```
+
+
+
+El gráfico destaca de manera evidente que los meses más activos en eventos coinciden con la temporada de verano. Esta tendencia se explica, en parte, por las condiciones climáticas favorables que permiten la celebración de eventos al aire libre. Además, aprovechar la temporada estival en nuestro país, donde se observa un aumento en la cantidad de personas que disfrutan de sus vacaciones durante esos meses. Esta confluencia juega un papel crucial al estimular una participación más activa y una mayor asistencia a los eventos.
+
+
+
+
+## Reflexiones Finales
+
+En un primer análisis, es necesario destacar que, desde un punto de vista práctico, me he enfrentado a la dificultad de trabajar con una base de datos que, si bien contiene información valiosa, aún presenta áreas de mejora significativas en términos de identificación de datos relevantes, como la afluencia a los eventos, los meses en los que tienen lugar, entre otros aspectos. 
+
+
+En terminos de la tématica en particular y tras examinar detenidamente los datos, surgen varias reflexiones: a lo largo de estos años, se evidencia un notable impulso y crecimiento en la cantidad de eventos, especialmente fiestas, festivales y carnavales. Estos eventos no solo buscan celebrar cada localidad, sino también fomentar una identidad única, adaptándose a la especificidad distintiva de cada ocasión. Este fenómeno refleja un compromiso continuo con la diversidad cultural y el fortalecimiento de la singularidad de cada evento en el tejido social.  
+
+La participación activa de los/as residentes locales en estas festividades promueve un sentido arraigado de identidad y orgullo comunitario. Al destacar la riqueza cultural y las tradiciones únicas de una ciudad, estos eventos no solo enriquecen la experiencia de quienes participan, sino que también posicionan la ciudad como un destino atractivo para futuros/as turistas. En última instancia, las fiestas y festivales no solo celebran la diversidad cultural, sino que también operan como motores esenciales para el progreso económico y el florecimiento del turismo local.
+
+Este fenómeno se ha observado en diversos destinos, donde la celebración de eventos culturales ha elevado el valor percibido de dichos lugares, incrementando su reconocimiento y maximizando los beneficios para comercios y alojamientos, tanto pequeños como grandes. En consonancia con las teorías del capital cultural de Bourdieu, estos eventos no solo constituyen momentos de disfrute, sino que también contribuyen a la construcción y consolidación del capital cultural de una comunidad, fortaleciendo su posición en el escenario turístico. Por esta razón, cada año presenciamos un crecimiento en el número de lugares que se suman a esta tendencia, reconociendo el potencial transformador de estas celebraciones para el desarrollo económico y la proyección turística. 
+
+Este tipo de evaluaciones podría contribiur a generar politicas que busquen promover la participación de turistas de distintas partes del país, fomentando así las propuestas de desarrollo a partir de eventos culturales de cada localidad. A futuro sería interesante análizar, la correlación de los mismos con políticas de promoción del turismo (como previaje) que permitan evidenciar si las mismas podrían generar incentivos para una mayor asistencia de personas en dichos eventos. 
+

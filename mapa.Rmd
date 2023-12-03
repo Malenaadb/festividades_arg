@@ -1,29 +1,70 @@
 ---
 title: "Busca tu evento Cultural"
 description: |
-site: distill::distill_website
+output: distill::distill_article
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+En el siguiente mapa interactivo podrás conocer los distintos eventos que se realizan en las distintas provincias de nuestro país. 
 
-```{r cars}
-summary(cars)
+Te invito a que revises y, quien te dice, darte una vuelta para conocer nuestra hermosa Argentina!
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(leaflet)
+library(tidygeocoder)
+library(rmarkdown)
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+fiestas <- read.csv("https://datos.cultura.gob.ar/dataset/0560ef96-55ca-4026-b70a-d638e1541c05/resource/d948730c-e029-49c2-b63d-86fac65ac30a/download/10_fiestaspopulares_festivales-datos_abiertos-2.csv", quote = '"', stringsAsFactors = TRUE, encoding = "UTF-8")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+fiestas$Latitud <- as.numeric(sub(",", ".", fiestas$Latitud))
+fiestas$Longitud <- as.numeric(sub(",", ".", fiestas$Longitud))
+```
+
+```{r}
+nas <- which(is.na(fiestas$Latitud) | is.na(fiestas$Longitud))
+```
+
+```{r}
+fiestas <- fiestas[-nas, ]
+
+```
+
+
+```{r}
+filtro <- fiestas %>% 
+  select(Categoria, Provincia, Localidad.Paraje, Nombre, Latitud, Longitud, Temática_principal, Mes.de.realización,Cantidad.aprox.de.asistentes) %>%
+  filter(Categoria %in% c("Fiesta y/o festival", "Carnaval"))
+
+```
+
+
+```{r}
+mapa <- leaflet(filtro) %>%
+  addProviderTiles("CartoDB.Positron") %>%
+  addMarkers(~Longitud, ~Latitud,  popup = ~paste("<b>Nombre:</b> ", Nombre, 
+                            "<br><b>Categoría:</b> ", Categoria, 
+                            "<br><b>Localidad/Paraje:</b> ", Localidad.Paraje, 
+                            "<br><b>Mes de Realización:</b> ", Mes.de.realización), 
+             clusterOptions = markerClusterOptions())
+```
+
+```{r, width=800}
+mapa
+```
+
+
+
