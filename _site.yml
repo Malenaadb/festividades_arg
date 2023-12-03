@@ -1,0 +1,19 @@
+name: "festividades_arg"
+title: "Eventos Culturales Nacionales"
+description: |
+  Trabajo práctico para la materia "Instrumentos de Análisis Urbano II"
+  Malena De Baere
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Enterate más"
+      href: about.html
+    - text: "Busca tu evento cultural"
+      href: mapa.html
+    - text: "Sobre mi"
+      href: sobremi.html
+      
+  left:
+    - text: "Bienvenidos/as"
+      href: index.html
+output: distill::distill_article
