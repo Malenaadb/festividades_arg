@@ -1,14 +1,14 @@
 ---
-title: "Eventos Culturales Nacionales"
+title: "Eventos Culturales en Argentina"
 description: |
-  Aquí encontrarán un breve recorrido por distintos eventos realizados en Argentina. 
+  Aquí encontrarán un breve recorrido por distintos eventos realizados en el pais. 
   Pasen y vean 
 site: distill::distill_website
 ---
 
 ## Bienvenidos/as
 
-En el siguiente sitio encontrarás información relativa a distintas fiestas, festivales y carnavales que se realizan a lo largo y ancho de nuestro país. 
+En el siguiente sitio encontrarás información relativa a distintas fiestas, festivales y carnavales que se realizan a lo largo y ancho de Argentina. 
 
 ¡Te invito a seguir clickeando para enterarte cuantas localidades podes recorrer y qué cantidad de eventos podes encontrar!
 

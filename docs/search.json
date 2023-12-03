@@ -5,29 +5,29 @@
       "title": "Enterate Más",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-12-03T00:51:34-03:00"
+      "last_modified": "2023-12-03T01:27:27-03:00"
     },
     {
       "path": "index.html",
-      "title": "Eventos Culturales Nacionales",
-      "description": "Aquí encontrarán un breve recorrido por distintos eventos realizados en Argentina. \nPasen y vean \n",
+      "title": "Eventos Culturales en Argentina",
+      "description": "Aquí encontrarán un breve recorrido por distintos eventos realizados en el pais. \nPasen y vean \n",
       "author": [],
-      "contents": "\r\nBienvenidos/as\r\nEn el siguiente sitio encontrarás información relativa a distintas fiestas, festivales y carnavales que se realizan a lo largo y ancho de nuestro país.\r\n¡Te invito a seguir clickeando para enterarte cuantas localidades podes recorrer y qué cantidad de eventos podes encontrar!\r\nFuente: Ministerio de Cultura de la Nación\r\n\r\n\r\n",
-      "last_modified": "2023-12-03T00:51:36-03:00"
+      "contents": "\r\nBienvenidos/as\r\nEn el siguiente sitio encontrarás información relativa a distintas fiestas, festivales y carnavales que se realizan a lo largo y ancho de Argentina.\r\n¡Te invito a seguir clickeando para enterarte cuantas localidades podes recorrer y qué cantidad de eventos podes encontrar!\r\nFuente: Ministerio de Cultura de la Nación\r\n\r\n\r\n",
+      "last_modified": "2023-12-03T01:28:34-03:00"
     },
     {
       "path": "mapa.html",
       "title": "Busca tu evento Cultural",
       "author": [],
       "contents": "\r\nR Markdown\r\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\r\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\r\n\r\n\r\nsummary(cars)\r\n\r\n     speed           dist       \r\n Min.   : 4.0   Min.   :  2.00  \r\n 1st Qu.:12.0   1st Qu.: 26.00  \r\n Median :15.0   Median : 36.00  \r\n Mean   :15.4   Mean   : 42.98  \r\n 3rd Qu.:19.0   3rd Qu.: 56.00  \r\n Max.   :25.0   Max.   :120.00  \r\n\r\nIncluding Plots\r\nYou can also embed plots, for example:\r\n\r\n\r\n\r\nNote that the echo = FALSE parameter was added to the code chunk to prevent printing of the R code that generated the plot.\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-12-03T00:51:37-03:00"
+      "last_modified": "2023-12-03T01:27:30-03:00"
     },
     {
       "path": "sobremi.html",
       "title": "Sobre mi",
       "author": [],
       "contents": "\r\nR Markdown\r\nThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.\r\nWhen you click the Knit button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:\r\n\r\n\r\nsummary(cars)\r\n\r\n     speed           dist       \r\n Min.   : 4.0   Min.   :  2.00  \r\n 1st Qu.:12.0   1st Qu.: 26.00  \r\n Median :15.0   Median : 36.00  \r\n Mean   :15.4   Mean   : 42.98  \r\n 3rd Qu.:19.0   3rd Qu.: 56.00  \r\n Max.   :25.0   Max.   :120.00  \r\n\r\nIncluding Plots\r\nYou can also embed plots, for example:\r\n\r\n\r\n\r\nNote that the echo = FALSE parameter was added to the code chunk to prevent printing of the R code that generated the plot.\r\n\r\n\r\n\r\n",
-      "last_modified": "2023-12-03T00:51:39-03:00"
+      "last_modified": "2023-12-03T01:27:31-03:00"
     }
   ],
   "collections": []
